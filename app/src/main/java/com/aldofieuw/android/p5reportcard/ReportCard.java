@@ -7,12 +7,14 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+
 import java.util.ArrayList;
 
 
@@ -46,6 +48,12 @@ public class ReportCard extends AppCompatActivity {
         public int  getScore()
         {
             return mScore;
+        }
+        @Override
+        /* make an String representation of the mark
+        *  mark has a score for a NameClass */
+        public String toString(){
+            return String.format(getScore() + " for " + getNameClass());
         }
     }
 
@@ -82,6 +90,8 @@ public class ReportCard extends AppCompatActivity {
                 * and changed to bold*/
                score = "ABS";
                 scoreTextView.setTypeface(null,Typeface.BOLD);
+                /* reset */
+                scoreTextView.setTextColor(Color.BLACK);
             }else
             {
                 score= String.valueOf(currentMark.getScore());
@@ -91,6 +101,12 @@ public class ReportCard extends AppCompatActivity {
                      */
                    scoreTextView.setTextColor(Color.RED);
                     scoreTextView.setTypeface(null,Typeface.BOLD);
+                }else{
+                    /* If the value is above (or equal) to 10 than the default formating has to be used
+                     (because textView are being reused, sometimes the styling has to be reset)
+                     */
+                    scoreTextView.setTextColor(Color.BLACK);
+                    scoreTextView.setTypeface(null, Typeface.NORMAL);
                 }
             }
             /* Set the score to the TextView */
@@ -133,23 +149,15 @@ public class ReportCard extends AppCompatActivity {
         marks.add(new Mark("Cross-disciplinary final project",12));
         marks.add(new Mark("Hardware programming",10));
 
-        /* Extra */
-        marks.add(new Mark("Mathematics A",14));
-        marks.add(new Mark("Physics I",8));
-        marks.add(new Mark("Mathematics A",10));
-        marks.add(new Mark("Physics I",12));
-        marks.add(new Mark("Signals and Systems",11));
-        marks.add(new Mark("Digital Electronics",10));
-        marks.add(new Mark("Operating Systems II",10));
-        marks.add(new Mark("Computer networks III",10));
-        marks.add(new Mark("Algorithms",-1));
-        marks.add(new Mark("Programming in C ++",10));
-        marks.add(new Mark("Databases 1 and 2",10));
-        marks.add(new Mark("Cross-disciplinary final project",12));
-        marks.add(new Mark("Hardware programming",10));
+
+        /* Show log in a loop for each mark*/
+        for (int i = 0; i < marks.size(); i++) {
+            /* show the data of the mark as a toString() value */
+            Log.v("ReportCard", "Score at index "+ i + ": " + marks.get(i).toString());
+        }
 
 
-        //Show the marks withe the ReportAdapter
+        //Show the marks with the ReportAdapter
         ReportAdapter adapter =
                 new ReportAdapter(this, marks);
 
